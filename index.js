@@ -106,6 +106,7 @@ const Swipeout = React.createClass({
     scroll: PropTypes.func,
     style: View.propTypes.style,
     sensitivity: PropTypes.number,
+    buttonWidth: PropTypes.number,
   },
 
   getDefaultProps: function() {
@@ -157,10 +158,11 @@ const Swipeout = React.createClass({
       if (this.props.onClose) this.props.onClose();
     }
     this.refs.swipeoutContent.measure((ox, oy, width, height) => {
+      let buttonWidth = this.props.buttonWidth || (width/5);
       this.setState({
-        btnWidth: (width/5),
-        btnsLeftWidth: this.props.left ? (width/5)*this.props.left.length : 0,
-        btnsRightWidth: this.props.right ? (width/5)*this.props.right.length : 0,
+        btnWidth: buttonWidth,
+        btnsLeftWidth: this.props.left ? buttonWidth*this.props.left.length : 0,
+        btnsRightWidth: this.props.right ? buttonWidth*this.props.right.length : 0,
         swiping: true,
         timeStart: (new Date()).getTime(),
       });
@@ -314,7 +316,7 @@ const Swipeout = React.createClass({
           onLayout={this._onLayout}
           {...this._panResponder.panHandlers}
           onStartShouldSetResponderCapture={() => (this.state.openedLeft || this.state.openedRight)}
-          onMoveShouldSetResponderCapture={() => true}
+          onMoveShouldSetResponderCapture={() => false}
         >
           {this.props.children}
         </View>
